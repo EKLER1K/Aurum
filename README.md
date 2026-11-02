@@ -87,6 +87,29 @@ npm run start
 | `npm run win:dev` | Запустить Windows-приложение из исходников |
 | `npm run win:build` | Собрать portable `.exe` в `dist/` |
 
+### Обновление версии
+
+Для смены версии есть маленькая утилита `tools\AurumVersionBuilder.exe` (Windows, .NET Framework 4.x - доустанавливать ничего не нужно):
+
+1. Укажи версию - `1.05` или `1.0.5`.
+2. Отметь **Beta**, если нужен суффикс `Beta` в названии и артефактах.
+3. Проверь **versionCode** - по умолчанию он на единицу больше текущего.
+4. Нажми **«Применить и собрать»**.
+
+Утилита обновит `src/lib/version.ts`, `package.json`, `android/app/build.gradle` и упоминания артефактов в README, затем запустит обе сборки и положит в `dist/` файлы `Aurum-<версия>[-Beta].apk` и `Aurum-<версия>[-Beta]-win.exe`. Кнопка **«Только версия»** меняет файлы без сборки.
+
+Скрипты сборки берут имя артефакта из `src/lib/version.ts`, поэтому версию достаточно менять в одном месте. Пересобрать саму утилиту:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\build-version-builder.ps1
+```
+
+Есть и консольный режим для автоматизации:
+
+```powershell
+.\tools\AurumVersionBuilder.exe --update 1.05 --beta --code 7
+```
+
 ## Android-приложение
 
 Готовый установочный файл лежит в `dist/Aurum-1.04-Beta.apk` (около 7 МБ). Это то же приложение, упакованное в нативный Android-контейнер через Capacitor: все экраны, стили и данные работают без интернета.

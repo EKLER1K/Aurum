@@ -77,7 +77,7 @@
           ]
         }
       ],
-      "artifactName": "Aurum-1.04-Beta-win.${ext}"
+      "artifactName": "Aurum-${version}-win.${ext}"
     },
     "portable": {
       "requestExecutionLevel": "user"

@@ -33,9 +33,21 @@ const built = fs
 
 if (!built) throw new Error("Не найден собранный .exe в build-win");
 
+// Имя артефакта берём из src/lib/version.ts — единый источник версии для интерфейса и сборок.
+const versionSource = fs.readFileSync(path.join(root, "src", "lib", "version.ts"), "utf8");
+const versionMatch = /APP_VERSION\s*=\s*"V([^"]+)"/.exec(versionSource);
+if (!versionMatch) throw new Error("Не удалось прочитать APP_VERSION из src/lib/version.ts");
+const display = versionMatch[1];
+const isBeta = display.endsWith(" Beta");
+const short = display.replace(/ Beta$/, "");
+const suffix = isBeta ? "-Beta" : "";
+
 const targetDir = path.join(root, "dist");
 fs.mkdirSync(targetDir, { recursive: true });
-const target = path.join(targetDir, `Aurum-1.04-Beta-win.exe`);
+for (const name of fs.readdirSync(targetDir)) {
+  if (/^Aurum-.+-win\.exe$/i.test(name)) fs.rmSync(path.join(targetDir, name), { force: true });
+}
+const target = path.join(targetDir, `Aurum-${short}${suffix}-win.exe`);
 fs.copyFileSync(built, target);
 
 const mb = (fs.statSync(target).size / 1024 / 1024).toFixed(2);

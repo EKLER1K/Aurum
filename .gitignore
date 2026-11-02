@@ -30,3 +30,7 @@ android/app/src/main/assets/public
 build-win
 *.exe
 dist/*.blockmap
+
+# Утилита сборки версий
+tools/AurumVersionBuilder.ico
+!tools/AurumVersionBuilder.exe

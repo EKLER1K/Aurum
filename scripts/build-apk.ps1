@@ -71,9 +71,19 @@ Write-Host "==> Проверка подписи" -ForegroundColor Cyan
 & "$sdk\build-tools\36.0.0\apksigner.bat" verify --print-certs $apk
 if ($LASTEXITCODE -ne 0) { throw "Подпись APK не прошла проверку" }
 
+# Имя артефакта берём из src\lib\version.ts — единый источник версии для интерфейса и сборок.
+$versionSource = Get-Content "src\lib\version.ts" -Raw
+if ($versionSource -notmatch 'APP_VERSION = "V([^"]+)"') {
+  throw "Не удалось прочитать APP_VERSION из src\lib\version.ts"
+}
+$display = $Matches[1]
+$isBeta = $display.EndsWith(" Beta")
+$short = $display -replace " Beta$", ""
+$suffix = if ($isBeta) { "-Beta" } else { "" }
+
 New-Item -ItemType Directory -Force -Path "dist" | Out-Null
 Get-ChildItem "dist\Aurum-*.apk" -ErrorAction SilentlyContinue | Remove-Item -Force
-$target = "dist\Aurum-1.04-Beta.apk"
+$target = "dist\Aurum-$short$suffix.apk"
 Copy-Item $apk $target -Force
 
 $mb = [math]::Round((Get-Item $target).Length / 1MB, 2)
