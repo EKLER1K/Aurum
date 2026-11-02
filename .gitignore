@@ -1,0 +1,32 @@
+node_modules
+.next
+out
+build
+.env*
+!.env.example
+*.tsbuildinfo
+next-env.d.ts
+.DS_Store
+npm-debug.log*
+
+# Локальные данные и служебные файлы
+aurum.json
+*.log
+
+# Android / Capacitor
+android/local.properties
+android/keystore.properties
+android/keystore/*.jks
+android/.gradle
+android/build
+android/app/build
+android/capacitor-cordova-android-plugins/build
+android/app/src/main/assets/public
+*.apk
+*.aab
+!dist/*.apk
+
+# Windows / Electron
+build-win
+*.exe
+dist/*.blockmap

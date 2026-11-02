@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="aurum_bg">#0A0A0B</color>
+    <color name="aurum_gold">#D4A853</color>
+    <color name="colorPrimary">#D4A853</color>
+    <color name="colorPrimaryDark">#0A0A0B</color>
+    <color name="colorAccent">#D4A853</color>
+</resources>
