@@ -12,6 +12,7 @@ import {
   sanitizeGoalDef,
   sanitizeGoalDefs,
 } from "./goals";
+import { defaultReminders, sanitizeReminderRules } from "./reminders";
 import {
   buildSnapshot,
   calcMaxStreak,
@@ -28,6 +29,7 @@ import type {
   GoalPreset,
   CustomAchievement,
   MonthGoal,
+  ReminderRule,
   Settings,
 } from "./types";
 import { useUiStore } from "./ui-store";
@@ -84,6 +86,8 @@ export function defaultData(): AppData {
       avatar: null,
       avatarZoom: 1,
       adminMode: false,
+      remindersEnabled: false,
+      reminders: defaultReminders(),
     },
     achievements: {},
     achievementOverrides: {},
@@ -178,6 +182,15 @@ function sanitizeSettings(
     avatar: sanitizeAvatar(source.avatar),
     avatarZoom: sanitizeZoom(source.avatarZoom, defaults.avatarZoom ?? 1),
     adminMode: Boolean(source.adminMode),
+    // Старые копии без напоминаний получают три правила по умолчанию.
+    remindersEnabled:
+      source.remindersEnabled === undefined
+        ? defaults.remindersEnabled
+        : Boolean(source.remindersEnabled),
+    reminders:
+      source.reminders === undefined
+        ? defaultReminders()
+        : sanitizeReminderRules(source.reminders),
   };
 }
 
@@ -574,6 +587,9 @@ interface AppActions {
   updateSettings: (patch: Partial<Settings>) => void;
   saveAchievement: (draft: AchievementDraft) => void;
   deleteAchievement: (id: string) => void;
+  saveReminder: (rule: ReminderRule) => void;
+  deleteReminder: (id: string) => void;
+  setRemindersEnabled: (enabled: boolean) => void;
   completeOnboarding: (input: {
     name: string;
     startDate: string;
@@ -777,6 +793,14 @@ export const useAppStore = create<AppStore>()(
                 patch.adminMode === undefined
                   ? Boolean(state.settings.adminMode)
                   : Boolean(patch.adminMode),
+              remindersEnabled:
+                patch.remindersEnabled === undefined
+                  ? Boolean(state.settings.remindersEnabled)
+                  : Boolean(patch.remindersEnabled),
+              reminders:
+                patch.reminders === undefined
+                  ? state.settings.reminders
+                  : sanitizeReminderRules(patch.reminders),
             },
           };
         });
@@ -849,6 +873,39 @@ export const useAppStore = create<AppStore>()(
               : [...state.deletedAchievements, id],
           };
         });
+      },
+
+      saveReminder: (rule) => {
+        set((state) => {
+          const exists = state.settings.reminders.some((item) => item.id === rule.id);
+          const next = exists
+            ? state.settings.reminders.map((item) => (item.id === rule.id ? rule : item))
+            : [...state.settings.reminders, rule];
+
+          return {
+            settings: {
+              ...state.settings,
+              reminders: sanitizeReminderRules(next),
+            },
+          };
+        });
+      },
+
+      deleteReminder: (id) => {
+        set((state) => ({
+          settings: {
+            ...state.settings,
+            reminders: sanitizeReminderRules(
+              state.settings.reminders.filter((item) => item.id !== id),
+            ),
+          },
+        }));
+      },
+
+      setRemindersEnabled: (enabled) => {
+        set((state) => ({
+          settings: { ...state.settings, remindersEnabled: Boolean(enabled) },
+        }));
       },
 
       completeOnboarding: ({ name, startDate, incomeGoal, hourlyRate, currency }) => {

@@ -28,6 +28,16 @@ export interface MonthGoal {
   sportDaysGoal: number;
 }
 
+/** Ежедневное локальное напоминание (Android). */
+export interface ReminderRule {
+  id: string;
+  /** Время в формате "HH:MM", 24 часа, локальное время устройства. */
+  time: string;
+  title: string;
+  body: string;
+  enabled: boolean;
+}
+
 export interface Settings {
   name: string;
   currency: string;
@@ -39,6 +49,10 @@ export interface Settings {
   avatarZoom?: number;
   /** Полный контроль над достижениями: создание, правка и удаление. */
   adminMode?: boolean;
+  /** Общий выключатель локальных напоминаний. */
+  remindersEnabled: boolean;
+  /** Правила ежедневных напоминаний. */
+  reminders: ReminderRule[];
 }
 
 /** Иконка достижения — ключ из BADGE_ICONS. */

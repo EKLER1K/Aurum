@@ -44,6 +44,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { PageHeader } from "@/components/page-header";
 import { AvatarButton } from "@/components/avatar-button";
 import { AvatarPanel } from "@/components/avatar-uploader";
+import { RemindersCard } from "@/components/reminders-card";
 import {
   formatMoney,
   monthLabel,
@@ -51,6 +52,8 @@ import {
   plural,
   todayISO,
 } from "@/lib/format";
+import { syncReminders } from "@/lib/reminder-scheduler";
+import { isDayLogged } from "@/lib/reminders";
 import { exportPayload, useAppStore } from "@/lib/store";
 import { APP_VERSION_NUMBER, APP_VERSION } from "@/lib/version";
 import { exportBackupFile, isNativeApp } from "@/lib/backup";
@@ -269,6 +272,14 @@ export default function SettingsPage() {
     setPasteText("");
   };
 
+  /** Импорт и сброс меняют правила — сразу пересобираем расписание. */
+  const resyncReminders = () => {
+    const state = useAppStore.getState();
+    void syncReminders(state.settings.reminders, state.settings.remindersEnabled, {
+      skipToday: isDayLogged(state.entries[todayISO()]),
+    });
+  };
+
   const confirmImport = () => {
     if (!importPreview) return;
     setImporting(true);
@@ -280,6 +291,7 @@ export default function SettingsPage() {
     }
     setImportPreview(null);
     syncLocal();
+    resyncReminders();
     toast.success("Данные восстановлены", {
       description: "Записи, цели и достижения загружены из резервной копии.",
       icon: <Check className="size-4 text-success" strokeWidth={2} />,
@@ -290,6 +302,7 @@ export default function SettingsPage() {
     resetAll();
     setResetOpen(false);
     syncLocal();
+    resyncReminders();
     toast.success("Все данные очищены", {
       description: "Можно начать с чистого листа.",
       icon: <Trash2 className="size-4 text-danger" strokeWidth={1.8} />,
@@ -526,6 +539,8 @@ export default function SettingsPage() {
             </div>
           )}
         </Card>
+
+        <RemindersCard />
 
         <Card className="animate-fade-up overflow-hidden" style={{ animationDelay: "80ms" }}>
           <SectionHeader

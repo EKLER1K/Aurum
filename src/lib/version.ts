@@ -1,3 +1,3 @@
 /** Единая версия интерфейса для Android, Windows и веба. */
-export const APP_VERSION = "V1.04 Beta";
-export const APP_VERSION_NUMBER = "1.0.4";
+export const APP_VERSION = "V1.05 Beta";
+export const APP_VERSION_NUMBER = "1.0.5";

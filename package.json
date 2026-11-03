@@ -1,6 +1,6 @@
 {
   "name": "aurum",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "description": "Aurum — трекер целей, дохода и дисциплины",
   "author": "Aurum",
@@ -21,6 +21,7 @@
     "@capacitor/camera": "^8.2.6",
     "@capacitor/core": "^8.5.3",
     "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/local-notifications": "^8.3.1",
     "@capacitor/share": "^8.0.3",
     "@capacitor/splash-screen": "^8.0.2",
     "@radix-ui/react-dialog": "^1.1.6",

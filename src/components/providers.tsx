@@ -7,6 +7,7 @@ import { Splash } from "@/components/splash";
 import { OnboardingDialog } from "@/components/onboarding-dialog";
 import { QuickLogDialog } from "@/components/quick-log-dialog";
 import { AchievementCelebration } from "@/components/achievement-celebration";
+import { ReminderSync } from "@/components/reminder-sync";
 import { useAppStore } from "@/lib/store";
 import { useUiStore } from "@/lib/ui-store";
 
@@ -51,6 +52,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <AppShell>{children}</AppShell>
       <QuickLogDialog />
       <AchievementCelebration />
+      <ReminderSync />
       <OnboardingDialog />
       <Toaster
         theme="dark"
