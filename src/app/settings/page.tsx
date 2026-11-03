@@ -632,6 +632,37 @@ export default function SettingsPage() {
           </div>
         </Card>
 
+        <Card className="animate-fade-up overflow-hidden lg:col-span-2" style={{ animationDelay: "100ms" }}>
+          <SectionHeader
+            icon={Shield}
+            title="О приложении"
+            description="Политика конфиденциальности и условия использования"
+          />
+          <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <div className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-lg border border-line/70 bg-raised/50">
+                <Shield className="size-4 text-gold" strokeWidth={1.5} />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[12px] font-medium text-ink">Политика конфиденциальности</div>
+                <p className="mt-1 max-w-md text-[10px] leading-relaxed text-muted">
+                  Aurum не собирает и не передаёт персональные данные. Всё хранится локально на устройстве.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="https://EKLER1K.github.io/Aurum/docs/privacy-policy.html"
+              passHref
+              legacyBehavior
+            >
+              <Button variant="secondary" size="sm" className="shrink-0">
+                Открыть политику
+                <ArrowRight className="size-3.5" />
+              </Button>
+            </Link>
+          </div>
+        </Card>
+
         <Card className="animate-fade-up overflow-hidden border-danger/20" style={{ animationDelay: "120ms" }}>
           <SectionHeader
             icon={Shield}
